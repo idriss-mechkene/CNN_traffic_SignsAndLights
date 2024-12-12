@@ -4,7 +4,7 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img
 import numpy as np
 
 # Load the model
-model = load_model('source\\traffic_signs_model_without_crop_5705.keras')
+model = load_model('traffic_signs_model_without_crop_64_29.keras')
 
 CLASS_LABELS = [
     'Class 0: Green Light',

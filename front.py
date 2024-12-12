@@ -9,7 +9,7 @@ import numpy as np
 LABELS_DIR = r'C:\Users\idris\OneDrive\Documents\DataSet\train\labels'
 
 # Load the model
-model = load_model('source\\traffic_signs_model.keras')
+model = load_model('traffic_signs_model_90x90_crop_94_17.keras.keras')
 
 CLASS_LABELS = [
     'Class 0: Green Light',
@@ -42,19 +42,16 @@ def predict_and_crop_image(image, label_path):
             for line in lines:
                 class_id, x_center, y_center, width, height = map(float, line.split())
 
-                # Convert normalized coordinates to pixel values
                 x_center *= img_width
                 y_center *= img_height
                 width *= img_width
                 height *= img_height
 
-                # Calculate cropping coordinates
                 x_min = int(x_center - width / 2)
                 y_min = int(y_center - height / 2)
                 x_max = int(x_center + width / 2)
                 y_max = int(y_center + height / 2)
 
-                # Crop the image
                 cropped_img = img.crop((x_min, y_min, x_max, y_max))
                 cropped_img = cropped_img.resize((416, 416))
                 cropped_img_array = img_to_array(cropped_img) / 255.0
@@ -62,10 +59,8 @@ def predict_and_crop_image(image, label_path):
 
                 cropped_images.append(cropped_img_array)
 
-    # Convert to a batch
     cropped_images = np.array(cropped_images)
 
-    # Make predictions
     predictions = model.predict(cropped_images)
     results = []
     for pred in predictions:
@@ -82,19 +77,15 @@ def main():
     uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file is not None:
-        # Display the image
         st.image(uploaded_file, caption='Uploaded Image.')
 
-        # Get the corresponding label file
         file_name = os.path.basename(uploaded_file.name)
         label_name = file_name.replace('.jpg', '.txt')
         label_path = os.path.join(LABELS_DIR, label_name)
 
-        # Predict and crop
         if os.path.exists(label_path):
             results = predict_and_crop_image(uploaded_file, label_path)
 
-            # Display the results
             for idx, (class_label, confidence) in enumerate(results):
                 st.write(f"Crop {idx + 1}:")
                 st.write(f"Predicted Class: {class_label}")
