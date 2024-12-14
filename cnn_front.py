@@ -25,12 +25,10 @@ CLASS_LABELS = [
 ]
 
 def predict_image(image):
-    # Process the image
     image = load_img(image, target_size=(416, 416))
     image = img_to_array(image) / 255.0
-    image = np.expand_dims(image, axis=0)  # Add batch dimension
+    image = np.expand_dims(image, axis=0)  
 
-    # Make a prediction
     predictions = model.predict(image)
     print(predictions)
     class_idx = np.argmax(predictions[0])

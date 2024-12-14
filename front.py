@@ -6,10 +6,10 @@ import os
 import numpy as np
 
 # Define the directory containing the labels
-LABELS_DIR = r'C:\Users\idris\OneDrive\Documents\DataSet\train\labels'
+LABELS_DIR = r'C:\Users\idris\OneDrive\Documents\DataSet\test\labels'
 
 # Load the model
-model = load_model('traffic_signs_model_90x90_crop_94_17.keras.keras')
+model = load_model('traffic_signs_model_90x90_crop_94_17.keras')
 
 CLASS_LABELS = [
     'Class 0: Green Light',
@@ -30,11 +30,9 @@ CLASS_LABELS = [
 ]
 
 def predict_and_crop_image(image, label_path):
-    # Load the full image
     img = Image.open(image)
     img_width, img_height = img.size
 
-    # Read the label file
     cropped_images = []
     if os.path.exists(label_path):
         with open(label_path, 'r') as f:
@@ -53,7 +51,8 @@ def predict_and_crop_image(image, label_path):
                 y_max = int(y_center + height / 2)
 
                 cropped_img = img.crop((x_min, y_min, x_max, y_max))
-                cropped_img = cropped_img.resize((416, 416))
+                #cropped_img = cropped_img.resize((416, 416))
+                cropped_img = cropped_img.resize((90, 90))
                 cropped_img_array = img_to_array(cropped_img) / 255.0
                 st.image(cropped_img_array, caption='Uploaded Image.')
 
